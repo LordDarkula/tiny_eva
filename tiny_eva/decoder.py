@@ -27,7 +27,7 @@ class Video:
         while success:
             cv2.imwrite(f"{self.frames_path.resolve()}/frame{count}.jpg", image)
             success, image = vidcap.read()
-            print("Read a new frame: ", success)
+            print(f"Read a new frame: {success}")
             count += 1
         self._num_frames = count
 
