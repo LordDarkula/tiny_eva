@@ -4,6 +4,7 @@ import os
 import tiny_eva
 from tiny_eva.decoder import Video
 
+
 def test_decoded_num_frames(tmp_path):
     package_path = Path(tiny_eva.__file__).parent
     sample_video_location = package_path.parent / "data" / "sample_640x360.mp4"
@@ -13,6 +14,7 @@ def test_decoded_num_frames(tmp_path):
     video.decode(tmp_path)
 
     assert len(video) == 400
+
 
 def test_decoded_all_frames_jpg(tmp_path):
     package_path = Path(tiny_eva.__file__).parent
