@@ -2,6 +2,6 @@
 *.pyc
 out/
 venv/
-.pytest_cache
+*_cache
 __pychache__/
 *.egg-info
