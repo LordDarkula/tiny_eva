@@ -7,11 +7,17 @@ import cv2  # type: ignore
 
 class Video:
     def __init__(self, source: PathLike) -> None:
+        """
+        Represents a .mp4 video whose source is located at the path the user passed in.
+        """
         self.source = Path(source)
         self.frames_path: Optional[Path] = None
         self._num_frames = -1
 
     def decode(self, destination_dir: PathLike) -> None:
+        """
+        Decodes the .mp4 video into jpeg frames and save to directory the user passes in.
+        """
         self.frames_path = Path(destination_dir)
         self.frames_path.mkdir(exist_ok=True)
 
