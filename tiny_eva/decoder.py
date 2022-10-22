@@ -2,7 +2,7 @@ from os import PathLike
 from pathlib import Path
 from typing import Optional
 
-import cv2 # type: ignore
+import cv2  # type: ignore
 
 
 class Video:
