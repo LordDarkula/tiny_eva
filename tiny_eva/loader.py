@@ -1,4 +1,3 @@
-from keyword import kwlist
 from typing import Callable, Any
 
 

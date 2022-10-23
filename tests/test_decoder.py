@@ -27,3 +27,15 @@ def test_decoded_all_frames_jpg(decoded_video):
         if os.path.isfile(frame_path):
             ext = os.path.splitext(frame_path)[1]
             assert ext == ".jpg" or ext == ".jpeg"
+
+
+@pytest.mark.parametrize("test_input", [(0), (3), (399)])
+def test_query_valid_frame_shape(decoded_video, test_input):
+    frame = decoded_video[test_input]
+    assert frame.shape == (3, 360, 640)
+
+
+@pytest.mark.parametrize("test_input", [(-1), (400), (523)])
+def test_query_out_of_bounds(decoded_video, test_input):
+    with pytest.raises(IndexError):
+        decoded_video[test_input]
