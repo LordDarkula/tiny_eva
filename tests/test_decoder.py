@@ -32,7 +32,7 @@ def test_decoded_all_frames_jpg(decoded_video):
 @pytest.mark.parametrize("test_input", [(0), (3), (399)])
 def test_query_valid_frame_shape(decoded_video, test_input):
     frame = decoded_video[test_input]
-    assert frame.shape == (3, 360, 640)
+    assert frame.to_numpy().shape == (3, 360, 640)
 
 
 @pytest.mark.parametrize("test_input", [(-1), (400), (523)])
@@ -46,6 +46,6 @@ def test_iterate_over_video(decoded_video):
     for frame in decoded_video:
         if count == 3:
             break
-        assert frame.shape == (3, 360, 640)
+        assert frame.to_numpy().shape == (3, 360, 640)
 
         count += 1

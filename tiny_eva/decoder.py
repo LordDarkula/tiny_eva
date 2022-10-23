@@ -1,11 +1,28 @@
 from os import PathLike
 from pathlib import Path
 from typing import Optional
+from dataclasses import dataclass
 
 import cv2  # type: ignore
 import numpy as np  # type: ignore
 from numpy.typing import ArrayLike  # type: ignore
 from PIL import Image  # type: ignore
+
+
+@dataclass(frozen=True)
+class Frame:
+    source: PathLike
+
+    def to_numpy(self) -> ArrayLike:
+        """
+        Convert Frame into numpy array.
+
+        Returns:
+            np.array of shape (num_channels, height, width)
+        """
+        image = Image.open(self.source)
+        frame = np.asarray(image)
+        return np.transpose(frame, (2, 0, 1))
 
 
 class Video:
@@ -42,7 +59,7 @@ class Video:
     def __len__(self) -> int:
         return self._num_frames
 
-    def __getitem__(self, idx: int) -> ArrayLike:
+    def __getitem__(self, idx: int) -> Frame:
         """
         After video is decoded, individual frames can be accessed with idx.
 
@@ -60,6 +77,4 @@ class Video:
                 f"Cannot get frame {idx}.\nThere are {self._num_frames} frames in the video."
             )
 
-        image = Image.open(self.frames_path / self._frame_name(idx))
-        frame = np.asarray(image)
-        return np.transpose(frame, (2, 0, 1))
+        return Frame(self.frames_path / self._frame_name(idx))
