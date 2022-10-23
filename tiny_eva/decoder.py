@@ -53,9 +53,7 @@ class Video:
             np.array of shape (num_channels, height, width)
         """
         if self.frames_path is None:
-            raise ValueError(
-                "You must decode the video first before accessing frames."
-            )
+            raise ValueError("You must decode the video first before accessing frames.")
 
         if idx < 0 or idx >= self._num_frames:
             raise IndexError(

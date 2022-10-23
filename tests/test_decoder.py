@@ -39,3 +39,13 @@ def test_query_valid_frame_shape(decoded_video, test_input):
 def test_query_out_of_bounds(decoded_video, test_input):
     with pytest.raises(IndexError):
         decoded_video[test_input]
+
+
+def test_iterate_over_video(decoded_video):
+    count = 0
+    for frame in decoded_video:
+        if count == 3:
+            break
+        assert frame.shape == (3, 360, 640)
+
+        count += 1
