@@ -9,9 +9,35 @@ from numpy.typing import ArrayLike  # type: ignore
 from PIL import Image  # type: ignore
 
 
-@dataclass(frozen=True)
 class Frame:
-    source: PathLike
+    """
+    Frame represents a single frame from a video.
+    A Frame can be a jpeg image stored on disk or a numpy array in memory.
+    A Frame must be either on-disk or in-memory but not both or neither.
+    """
+
+    def __init__(
+        self, source: Optional[PathLike] = None, frame_array: Optional[ArrayLike] = None
+    ):
+        if source is None and frame_array is None:
+            raise ValueError(
+                "A Frame must be initialized with either a source path or a numpy array."
+            )
+
+        if source is not None and frame_array is not None:
+            raise ValueError(
+                "A Frame cannot be initializaed with both a source path and a numpy array."
+            )
+
+        self.source = source
+        self.frame_array = frame_array
+
+    @classmethod
+    def from_numpy(cls, frame_array: ArrayLike):
+        """
+        Accepts np.array of shape (num_channels, height, width)
+        """
+        return cls(frame_array=frame_array)
 
     def to_numpy(self) -> ArrayLike:
         """
@@ -20,9 +46,13 @@ class Frame:
         Returns:
             np.array of shape (num_channels, height, width)
         """
+        if self.frame_array is not None:
+            return self.frame_array
+
         image = Image.open(self.source)
         frame = np.asarray(image)
-        return np.transpose(frame, (2, 0, 1))
+        self.frame_array = np.transpose(frame, (2, 0, 1))
+        return self.frame_array
 
 
 class Video:
@@ -82,4 +112,4 @@ class Video:
                 f"Cannot get frame {idx}.\nThere are {self._num_frames} frames in the video."
             )
 
-        return Frame(self.frames_path / self._frame_name(idx))
+        return Frame(source=(self.frames_path or Path.home()) / self._frame_name(idx))
