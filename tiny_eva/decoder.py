@@ -1,7 +1,6 @@
 from os import PathLike
 from pathlib import Path
 from typing import Optional
-from dataclasses import dataclass
 
 import cv2  # type: ignore
 import numpy as np  # type: ignore
@@ -29,8 +28,15 @@ class Frame:
                 "A Frame cannot be initializaed with both a source path and a numpy array."
             )
 
-        self.source = source
-        self.frame_array = frame_array
+        self._source = Path(source) if source is not None else None
+        self._frame_array = frame_array
+
+    @classmethod
+    def from_source(cls, source: PathLike):
+        """
+        Accepts path to a valid jpeg image
+        """
+        return cls(source=source)
 
     @classmethod
     def from_numpy(cls, frame_array: ArrayLike):
@@ -46,13 +52,12 @@ class Frame:
         Returns:
             np.array of shape (num_channels, height, width)
         """
-        if self.frame_array is not None:
-            return self.frame_array
+        if self._frame_array is None:
+            image = Image.open(self._source)
+            frame = np.asarray(image)
+            self._frame_array = np.transpose(frame, (2, 0, 1))
 
-        image = Image.open(self.source)
-        frame = np.asarray(image)
-        self.frame_array = np.transpose(frame, (2, 0, 1))
-        return self.frame_array
+        return self._frame_array
 
 
 class Video:

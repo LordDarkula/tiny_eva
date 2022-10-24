@@ -1,5 +1,4 @@
 import numpy as np  # type: ignore
-from numpy.typing import ArrayLike  # type: ignore
 import pytest
 
 from tiny_eva.loader import UDF
