@@ -32,6 +32,7 @@ class Video:
         """
         self.source = Path(source)
         self.frames_path: Optional[Path] = None
+        self.is_decoded: bool = False
         self._num_frames = -1
 
     def _frame_name(self, idx: int) -> str:
@@ -54,9 +55,13 @@ class Video:
             success, image = vidcap.read()
             print(f"Read a new frame: {success}")
             count += 1
+
+        self.is_decoded = True
         self._num_frames = count
 
     def __len__(self) -> int:
+        if not self.is_decoded:
+            return -1
         return self._num_frames
 
     def __getitem__(self, idx: int) -> Frame:
@@ -69,7 +74,7 @@ class Video:
         Returns:
             np.array of shape (num_channels, height, width)
         """
-        if self.frames_path is None:
+        if not self.is_decoded:
             raise ValueError("You must decode the video first before accessing frames.")
 
         if idx < 0 or idx >= self._num_frames:
