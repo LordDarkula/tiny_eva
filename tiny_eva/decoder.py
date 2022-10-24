@@ -45,6 +45,10 @@ class Frame:
         """
         return cls(frame_array=frame_array)
 
+    @property
+    def source(self) -> Optional[PathLike]:
+        return self._source
+
     def to_numpy(self) -> ArrayLike:
         """
         Convert Frame into numpy array.
