@@ -2,7 +2,7 @@ import numpy as np  # type: ignore
 import pytest
 
 from tiny_eva.loader import UDF
-from tiny_eva.decoder import Frame
+from tiny_eva.frame import Frame
 
 
 @pytest.fixture

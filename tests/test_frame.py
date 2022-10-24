@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from tiny_eva.decoder import Frame
+from tiny_eva.frame import Frame
 
 
 def test_initialize_from_array():
