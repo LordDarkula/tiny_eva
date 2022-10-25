@@ -4,7 +4,7 @@ import os
 import pytest
 
 import tiny_eva
-from tiny_eva.decoder import Video
+from tiny_eva.video import Video
 
 
 @pytest.fixture(scope="session")

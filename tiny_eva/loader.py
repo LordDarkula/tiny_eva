@@ -1,10 +1,10 @@
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 from os import PathLike
 from dataclasses import dataclass
 
 import torch
 
-from tiny_eva.decoder import Frame
+from tiny_eva.frame import Frame
 
 
 @dataclass(frozen=True)
