@@ -1,9 +1,24 @@
 from typing import Any, Callable, Optional
 from os import PathLike
+from dataclasses import dataclass
 
 import torch
 
 from tiny_eva.decoder import Frame
+
+
+@dataclass(frozen=True)
+class Bbox:
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+
+
+@dataclass(frozen=True)
+class Result:
+    pred_class: str
+    bbox: Bbox
 
 
 class UDF:
@@ -16,9 +31,18 @@ class UDF:
 
     @classmethod
     def from_torch_hub(cls, path: PathLike, name: str, pretrained: bool = True):
+        """
+        Loads model from pytorch hub. Downloads model, so this will take time.
+
+        Arguments:
+            path: hub path to model repo
+            name: name of hub model
+            pretrained: should fetched model be pretrained
+        """
+
         def model_func(frame: Frame):
             model = torch.hub.load(path, name, pretrained=pretrained)
-            return model(frame.source)
+            return model(frame.source).pandas().xyxy
 
         return cls(model_func)
 
