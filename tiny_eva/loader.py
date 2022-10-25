@@ -1,7 +1,7 @@
 from typing import Any, Callable
 from os import PathLike
 
-import torch # type: ignore
+import torch  # type: ignore
 
 from tiny_eva.frame import Frame
 
