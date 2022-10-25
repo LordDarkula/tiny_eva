@@ -35,7 +35,6 @@ class Video:
                 f"{self.frames_path.resolve()}/{self._frame_name(count)}", image
             )
             success, image = vidcap.read()
-            print(f"Read a new frame: {success}")
             count += 1
 
         self.is_decoded = True
