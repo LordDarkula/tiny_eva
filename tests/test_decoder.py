@@ -7,14 +7,15 @@ import tiny_eva
 from tiny_eva.decoder import Video
 
 
-@pytest.fixture
-def decoded_video(tmp_path):
+@pytest.fixture(scope="session")
+def decoded_video(tmp_path_factory):
     package_path = Path(tiny_eva.__file__).parent
     sample_video_location = package_path.parent / "data" / "sample_640x360.mp4"
+    decode_location = tmp_path_factory.mktemp("out")
 
-    video = Video(sample_video_location)
-    video.decode(tmp_path)
-    yield video
+    video = Video(sample_video_location.resolve())
+    video.decode(decode_location)
+    return video
 
 
 def test_decoded_num_frames(decoded_video):
