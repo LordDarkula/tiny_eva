@@ -1,4 +1,4 @@
-from typing import Callable, Any
+from typing import Any, Callable, Optional
 from os import PathLike
 
 import torch
@@ -17,9 +17,7 @@ class UDF:
     @classmethod
     def from_torch_hub(cls, path: PathLike, name: str, pretrained: bool = True):
         def model_func(frame: Frame):
-            model = torch.hub.load(
-                "ultralytics/yolov5", "yolov5s", pretrained=pretrained
-            )
+            model = torch.hub.load(path, name, pretrained=pretrained)
             return model(frame.source)
 
         return cls(model_func)

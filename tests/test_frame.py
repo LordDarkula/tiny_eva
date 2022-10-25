@@ -1,7 +1,4 @@
-from pathlib import Path
-
 import numpy as np
-import pytest
 
 from tiny_eva.frame import Frame
 
