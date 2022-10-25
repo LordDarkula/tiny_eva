@@ -1,7 +1,8 @@
 import numpy as np  # type: ignore
 import pytest
 
-from tiny_eva.loader import UDF, Result, Bbox
+from tiny_eva.loader import UDF
+from tiny_eva.result import Result, Bbox
 from tiny_eva.frame import Frame
 
 

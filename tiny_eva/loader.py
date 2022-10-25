@@ -1,24 +1,9 @@
 from typing import Any, Callable
 from os import PathLike
-from dataclasses import dataclass
 
-import torch
+import torch # type: ignore
 
 from tiny_eva.frame import Frame
-
-
-@dataclass(frozen=True)
-class Bbox:
-    x1: int
-    y1: int
-    x2: int
-    y2: int
-
-
-@dataclass(frozen=True)
-class Result:
-    pred_class: str
-    bbox: Bbox
 
 
 class UDF:
