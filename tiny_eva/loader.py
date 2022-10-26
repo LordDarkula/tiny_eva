@@ -1,18 +1,25 @@
 from typing import Any, Callable
 from os import PathLike
+from enum import Enum, auto
 
 import torch  # type: ignore
 
 from tiny_eva.frame import Frame
 
 
+class ModelSource(Enum):
+    CALLABLE = auto()
+    TORCH_HUB = auto()
+
+
 class UDF:
-    def __init__(self, func: Callable) -> None:
-        self.func: Callable = func
+    def __init__(self, func: Any, model_source: ModelSource) -> None:
+        self.func: Any = func
+        self.model_source: ModelSource = model_source
 
     @classmethod
     def from_callable(cls, func: Callable):
-        return cls(func)
+        return cls(func, ModelSource.CALLABLE)
 
     @classmethod
     def from_torch_hub(cls, path: PathLike, name: str, pretrained: bool = True):
@@ -24,12 +31,11 @@ class UDF:
             name: name of hub model
             pretrained: should fetched model be pretrained
         """
+        model = torch.hub.load(path, name, pretrained=pretrained)
+        return cls(model, ModelSource.TORCH_HUB)
 
-        def model_func(frame: Frame):
-            model = torch.hub.load(path, name, pretrained=pretrained)
-            return model(frame.source).pandas().xyxy
-
-        return cls(model_func)
-
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
-        return self.func(*args, **kwds)
+    def __call__(self, frame: Frame, **kwds: Any) -> Any:
+        if self.model_source == ModelSource.TORCH_HUB:
+            return self.func(frame.source).pandas().xyxy
+        else:
+            return self.func(frame, **kwds)

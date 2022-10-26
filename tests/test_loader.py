@@ -37,7 +37,7 @@ def test_all_zeros_false(all_zeros):
     assert not all_zeros(sample_frame) == "False"
 
 
-def test_yolo(yolo, traffic_frame_path):
+def test_yolo_result_len(yolo, traffic_frame_path):
     frame = Frame.from_source(traffic_frame_path)
     result = yolo(frame)
     assert len(result) == 1
