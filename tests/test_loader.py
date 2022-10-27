@@ -47,13 +47,12 @@ def test_yolo_result_len(yolo, traffic_frame_path):
 def test_yolo_first_result(yolo, traffic_frame_path):
     frame = Frame.from_source(traffic_frame_path)
     result = yolo(frame)
-
     result_classes = {"car", "person", "tree", "truck"}
-
     assert result[0].pred_class in result_classes
 
 
-# def test_alexnet(alexnet, traffic_frame_path):
-#     frame = Frame.from_source(traffic_frame_path)
-#     result = alexnet(frame)
-#     assert len(result) == 1
+@pytest.mark.skip
+def test_alexnet(alexnet, traffic_frame_path):
+    frame = Frame.from_source(traffic_frame_path)
+    result = alexnet(frame)
+    assert len(result) == 1
