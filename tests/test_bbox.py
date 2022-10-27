@@ -1,6 +1,6 @@
 import pytest
 
-from tiny_eva.result import Bbox
+from tiny_eva.bbox import Bbox
 
 
 @pytest.fixture
