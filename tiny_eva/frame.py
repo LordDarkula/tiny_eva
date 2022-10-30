@@ -1,6 +1,6 @@
 from os import PathLike
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import numpy as np  # type: ignore
 from numpy.typing import ArrayLike  # type: ignore
@@ -47,6 +47,12 @@ class Frame:
     @property
     def source(self) -> Optional[PathLike]:
         return self._source
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Frame):
+            return False
+
+        return np.array_equal(self.to_numpy(), other.to_numpy())
 
     def to_numpy(self) -> ArrayLike:
         """

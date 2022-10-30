@@ -13,8 +13,13 @@ def traffic_result(traffic_frame_path):
         Bbox.from_coords(c1=(32, 41), c2=(58, 55), label="tree"),
         Bbox.from_coords(c1=(3, 41), c2=(44, 45), label="car"),
     }
-    return Result(frame=Frame, bboxes=bboxes)
+    return Result(frame=frame, bboxes=bboxes)
 
 
 def test_two_cars_in_result(traffic_result):
     assert traffic_result.label_count("car") == 2
+
+
+def test_result_frame(traffic_frame_path, traffic_result):
+    frame = Frame.from_source(traffic_frame_path)
+    assert traffic_result.frame == frame
