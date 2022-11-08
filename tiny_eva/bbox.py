@@ -20,6 +20,13 @@ class Bbox:
     def from_coords(
         cls, c1: Tuple[int, int], c2: Tuple[int, int], label: Optional[str] = None
     ):
+        """
+        Construct Bbox from two tuples of two ints each representing two corners.
+
+        Arguments:
+            c1: bottom-left corner
+            c2: bottom-right corner
+        """
         return cls(x1=c1[0], y1=c1[1], x2=c2[0], y2=c2[1], label=label)
 
     @property
