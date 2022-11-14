@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 
 @dataclass(frozen=True)
@@ -14,7 +14,7 @@ class Bbox:
     y1: int
     x2: int
     y2: int
-    label: Optional[str] = None
+    label: Optional[Any] = None
 
     @classmethod
     def from_coords(
