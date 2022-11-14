@@ -86,10 +86,16 @@ class Video:
         Returns:
             np.array of shape (num_channels, height, width)
         """
+        if idx < 0:
+            raise IndexError("Negative indexing not suppoerted at this time")
+
+        if self._source == VideoSource.FRAME_LIST:
+            return self._frame_list[idx]
+
         if not self.is_decoded:
             raise ValueError("You must decode the video first before accessing frames.")
 
-        if idx < 0 or idx >= self._num_frames:
+        if idx >= self._num_frames:
             raise IndexError(
                 f"Cannot get frame {idx}.\nThere are {self._num_frames} frames in the video."
             )

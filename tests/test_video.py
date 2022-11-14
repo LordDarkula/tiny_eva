@@ -60,15 +60,27 @@ def test_decoded_all_frames_jpg(decoded_mp4_video):
 
 
 @pytest.mark.parametrize("test_input", [(0), (3), (399)])
-def test_query_valid_frame_shape(decoded_mp4_video, test_input):
+def test_mp4_index_access_valid_frame_shape(decoded_mp4_video, test_input):
     frame = decoded_mp4_video[test_input]
     assert frame.to_numpy().shape == (3, 360, 640)
 
 
+@pytest.mark.parametrize("test_input", [(0), (3), (14)])
+def test_frame_list_index_access_valid_frame_shape(blank_frame_video, test_input):
+    frame = blank_frame_video[test_input]
+    assert frame.to_numpy().shape == (3, 20, 20)
+
+
 @pytest.mark.parametrize("test_input", [(-1), (400), (523)])
-def test_query_out_of_bounds(decoded_mp4_video, test_input):
+def test_mp4_index_access_out_of_bounds(decoded_mp4_video, test_input):
     with pytest.raises(IndexError):
         decoded_mp4_video[test_input]
+
+
+@pytest.mark.parametrize("test_input", [(-1), (15), (42)])
+def test_frame_list_index_access_out_of_bounds(blank_frame_video, test_input):
+    with pytest.raises(IndexError):
+        blank_frame_video[test_input]
 
 
 def test_iterate_over_video(decoded_mp4_video):
