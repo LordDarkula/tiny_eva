@@ -1,21 +1,33 @@
 from os import PathLike
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
+from enum import Enum, auto
 
 import cv2  # type: ignore
 
 from tiny_eva.frame import Frame
 
 
+class VideoSource(Enum):
+    MP4_FILE = auto()
+    FRAME_LIST = auto()
+
+
 class Video:
-    def __init__(self, source: PathLike) -> None:
+    def __init__(self, mp4_file: Optional[PathLike] = None) -> None:
         """
         Represents a .mp4 video whose source is located at the path the user passed in.
         """
-        self.source = Path(source)
+
+        self._mp4_file: Optional[PathLike] = (
+            Path(mp4_file) if mp4_file is not None else None
+        )
         self.frames_path: Optional[Path] = None
         self.is_decoded: bool = False
         self._num_frames = -1
+
+    def from_frames(cls, frames: List[Frame]):
+        pass
 
     def _frame_name(self, idx: int) -> str:
         return f"frame{idx}.jpg"
@@ -27,7 +39,7 @@ class Video:
         self.frames_path = Path(destination_dir)
         self.frames_path.mkdir(exist_ok=True)
 
-        vidcap = cv2.VideoCapture(str(self.source.resolve()))
+        vidcap = cv2.VideoCapture(str(self._mp4_file.resolve()))
         success, image = vidcap.read()
         count = 0
         while success:
