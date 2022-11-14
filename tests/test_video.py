@@ -25,14 +25,6 @@ def decoded_mp4_video(tmp_path_factory, beach_mp4):
     return beach_copy
 
 
-@pytest.fixture(scope="session")
-def blank_frame_video():
-    frame_arr = np.zeros((3, 20, 20))
-    frames = [Frame.from_numpy(frame_arr) for _ in range(15)]
-    video = Video.from_frames(frames)
-    return video
-
-
 def test_raw_video_has_invalid_len(beach_mp4):
     with pytest.raises(ValueError):
         assert len(beach_mp4) == -1
