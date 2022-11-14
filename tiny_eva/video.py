@@ -1,11 +1,14 @@
 from os import PathLike
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Type, TypeVar
 from enum import Enum, auto
 
 import cv2  # type: ignore
 
 from tiny_eva.frame import Frame
+
+
+VideoType = TypeVar("VideoType", bound="Video")
 
 
 class VideoSource(Enum):
@@ -24,20 +27,20 @@ class Video:
         Represents a .mp4 video whose source is located at the path the user passed in.
         """
         self._source = video_source
-        self._mp4_file: Optional[PathLike] = None
+        self._mp4_file: Optional[Path] = None
         self._frame_list: Optional[List[Frame]] = None
         self.frames_path: Optional[Path] = None
         self.is_decoded: bool = False
         self._num_frames = -1
 
         if self._source == VideoSource.MP4_FILE:
-            self._mp4_file = Path(mp4_file)
+            self._mp4_file = Path(mp4_file) if mp4_file is not None else None
         elif self._source == VideoSource.FRAME_LIST:
             self._frame_list = frame_list
-            self._num_frames = len(frame_list)
+            self._num_frames = len(frame_list) if frame_list is not None else -1
 
     @classmethod
-    def from_mp4_file(cls, source: PathLike):
+    def from_mp4_file(cls: Type[VideoType], source: PathLike) -> VideoType:
         """
         Creates Video from mp4 file stored on disk.
         The user must run decode() before accessing individual frames.
@@ -48,7 +51,7 @@ class Video:
         return cls(video_source=VideoSource.MP4_FILE, mp4_file=source)
 
     @classmethod
-    def from_frames(cls, frames: List[Frame]):
+    def from_frames(cls: Type[VideoType], frames: List[Frame]) -> VideoType:
         """
         Creates Video from in-memory collection of frames.
         These frames can either be stored on disk as jpeg images or
@@ -65,7 +68,11 @@ class Video:
     def decode(self, destination_dir: PathLike) -> None:
         """
         Decodes the .mp4 video into jpeg frames and save to directory the user passes in.
+        TODO: handle frame list case
         """
+        if self._mp4_file is None:
+            raise ValueError("No mp4 source file found.")
+
         self.frames_path = Path(destination_dir)
         self.frames_path.mkdir(exist_ok=True)
 
@@ -84,6 +91,8 @@ class Video:
 
     def __len__(self) -> int:
         if self._source == VideoSource.FRAME_LIST:
+            if self._frame_list is None:
+                return -1
             return len(self._frame_list)
 
         if not self.is_decoded:
@@ -100,11 +109,18 @@ class Video:
 
         Returns:
             np.array of shape (num_channels, height, width)
+
+        Raises:
+            IndexError: Index out of bounds or negative index
+            ValueError: Video source is not found. This is either due to
+            frame list being missing or Video not being decoded.
         """
         if idx < 0:
             raise IndexError("Negative indexing not suppoerted at this time")
 
         if self._source == VideoSource.FRAME_LIST:
+            if self._frame_list is None:
+                raise ValueError("Frame list not found")
             return self._frame_list[idx]
 
         if not self.is_decoded:
