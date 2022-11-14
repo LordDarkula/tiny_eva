@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from typing import Any, Optional, Tuple
+from typing import Any, Optional, Tuple, Type, TypeVar
+
+BboxType = TypeVar("BboxType", bound="Bbox")
 
 
 @dataclass(frozen=True)
@@ -18,8 +20,11 @@ class Bbox:
 
     @classmethod
     def from_coords(
-        cls, c1: Tuple[int, int], c2: Tuple[int, int], label: Optional[str] = None
-    ):
+        cls: Type[BboxType],
+        c1: Tuple[int, int],
+        c2: Tuple[int, int],
+        label: Optional[str] = None,
+    ) -> BboxType:
         """
         Construct Bbox from two tuples of two ints each representing two corners.
 
