@@ -2,22 +2,7 @@ import numpy as np  # type: ignore
 import pytest
 
 from tiny_eva.udf_loader import UDF
-from tiny_eva.result import Result, Bbox
 from tiny_eva.frame import Frame
-
-
-@pytest.fixture
-def all_zeros_udf():
-    def all_zeros(frame: Frame) -> Result:
-        np_frame = frame.to_numpy()
-        frame_shape = np_frame.shape  # type: ignore
-        res = not np.any(np_frame)
-        return Result(
-            frame=Frame.from_numpy(np_frame),
-            bboxes={Bbox(x1=0, y1=0, x2=frame_shape[2], y2=frame_shape[1], label=res)},
-        )
-
-    return UDF.from_callable(all_zeros)
 
 
 @pytest.fixture(scope="session")

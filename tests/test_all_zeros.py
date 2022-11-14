@@ -1,8 +1,4 @@
 import pytest
-import numpy as np  # type: ignore
-
-from tiny_eva.frame import Frame
-from tiny_eva.video import Video
 
 
 @pytest.mark.skip

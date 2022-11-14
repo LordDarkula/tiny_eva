@@ -3,11 +3,9 @@ import os
 import copy
 
 import pytest
-import numpy as np  # type: ignore
 
 import tiny_eva
 from tiny_eva.video import Video
-from tiny_eva.frame import Frame
 
 
 @pytest.fixture(scope="session")
