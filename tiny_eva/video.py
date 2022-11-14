@@ -72,7 +72,7 @@ class Video:
             return len(self._frame_list)
 
         if not self.is_decoded:
-            return -1
+            raise ValueError("Must decode video with decode() before calculating len()")
 
         return self._num_frames
 
