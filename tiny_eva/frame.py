@@ -1,10 +1,12 @@
 from os import PathLike
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Type, TypeVar
 
 import numpy as np  # type: ignore
 from numpy.typing import ArrayLike  # type: ignore
 from PIL import Image  # type: ignore
+
+FrameType = TypeVar("FrameType", bound="Frame")
 
 
 class Frame:
@@ -31,16 +33,19 @@ class Frame:
         self._frame_array = frame_array
 
     @classmethod
-    def from_source(cls, source: PathLike):
+    def from_source(cls: Type[FrameType], source: PathLike) -> FrameType:
         """
         Accepts path to a valid jpeg image
         """
         return cls(source=source)
 
     @classmethod
-    def from_numpy(cls, frame_array: ArrayLike):
+    def from_numpy(cls: Type[FrameType], frame_array: ArrayLike) -> FrameType:
         """
-        Accepts np.array of shape (num_channels, height, width)
+        Create Frame object from a numpy array.
+
+        Arguments:
+            frame_array: np.array of shape (num_channels, height, width)
         """
         return cls(frame_array=frame_array)
 
