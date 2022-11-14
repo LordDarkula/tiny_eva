@@ -2,9 +2,11 @@ from pathlib import Path
 import os
 
 import pytest
+import numpy as np
 
 import tiny_eva
 from tiny_eva.video import Video
+from tiny_eva.frame import Frame
 
 
 @pytest.fixture(scope="session")
@@ -18,8 +20,20 @@ def decoded_video(tmp_path_factory):
     return video
 
 
-def test_decoded_num_frames(decoded_video):
+@pytest.fixture(scope="session")
+def blank_frame_video():
+    frame_arr = np.zeros((3, 20, 20))
+    frames = [Frame.from_numpy(frame_arr) for _ in range(15)]
+    video = Video.from_frames(frames)
+    return video
+
+
+def test_decoded_len(decoded_video):
     assert len(decoded_video) == 400
+
+
+def test_frame_list_len(blank_frame_video):
+    assert len(blank_frame_video) == 15
 
 
 def test_decoded_all_frames_jpg(decoded_video):

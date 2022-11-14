@@ -14,18 +14,27 @@ class VideoSource(Enum):
 
 
 class Video:
-    def __init__(self, video_source: VideoSource, mp4_file: Optional[PathLike] = None) -> None:
+    def __init__(
+        self,
+        video_source: VideoSource,
+        mp4_file: Optional[PathLike] = None,
+        frame_list: Optional[List[Frame]] = None,
+    ) -> None:
         """
         Represents a .mp4 video whose source is located at the path the user passed in.
         """
-
         self._source = video_source
-        self._mp4_file: Optional[PathLike] = (
-            Path(mp4_file) if mp4_file is not None else None
-        )
+        self._mp4_file: Optional[PathLike] = None
+        self._frame_list: Optional[List[Frame]] = None
         self.frames_path: Optional[Path] = None
         self.is_decoded: bool = False
         self._num_frames = -1
+
+        if self._source == VideoSource.MP4_FILE:
+            self._mp4_file = Path(mp4_file)
+        elif self._source == VideoSource.FRAME_LIST:
+            self._frame_list = frame_list
+            self._num_frames = len(frame_list)
 
     @classmethod
     def from_mp4_file(cls, source: PathLike):
@@ -33,7 +42,7 @@ class Video:
 
     @classmethod
     def from_frames(cls, frames: List[Frame]):
-        pass
+        return cls(video_source=VideoSource.FRAME_LIST, frame_list=frames)
 
     def _frame_name(self, idx: int) -> str:
         return f"frame{idx}.jpg"
@@ -59,8 +68,12 @@ class Video:
         self._num_frames = count
 
     def __len__(self) -> int:
+        if self._source == VideoSource.FRAME_LIST:
+            return len(self._frame_list)
+
         if not self.is_decoded:
             return -1
+
         return self._num_frames
 
     def __getitem__(self, idx: int) -> Frame:
