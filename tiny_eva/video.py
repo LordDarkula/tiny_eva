@@ -25,6 +25,12 @@ class Video:
     ) -> None:
         """
         Represents a .mp4 video whose source is located at the path the user passed in.
+
+        Arguments:
+            video_source: enum storing whether video source is mp4 file
+            on disk or frame list in memory
+            mp4_file: Path to mp4 file. Only defined if video is stored as mp4 file.
+            frame_list: List of Frame objects. Only defined if video is stored in memory.
         """
         self._source = video_source
         self._mp4_file: Optional[Path] = None
@@ -69,8 +75,14 @@ class Video:
         """
         Decodes the .mp4 video into jpeg frames and save to directory the user passes in.
         TODO: handle frame list case
+
+        Arguments:
+            destination_dir: path to directory to store decoded frames
+
+        Raises:
+            ValueError: if no mp4 file is found at source path
         """
-        if self._mp4_file is None:
+        if self._mp4_file is None or not self._mp4_file.exists():
             raise ValueError("No mp4 source file found.")
 
         self.frames_path = Path(destination_dir)
