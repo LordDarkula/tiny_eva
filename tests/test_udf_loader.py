@@ -17,7 +17,7 @@ def all_zeros():
             bboxes={Bbox(x1=0, y1=0, x2=frame_shape[2], y2=frame_shape[1], label=res)},
         )
 
-    yield UDF.from_callable(all_zeros)
+    return UDF.from_callable(all_zeros)
 
 
 @pytest.fixture(scope="session")
