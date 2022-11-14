@@ -7,7 +7,7 @@ from tiny_eva.frame import Frame
 
 
 @pytest.fixture
-def all_zeros():
+def all_zeros_udf():
     def all_zeros(frame: Frame) -> Result:
         np_frame = frame.to_numpy()
         frame_shape = np_frame.shape  # type: ignore
@@ -30,14 +30,14 @@ def alexnet():
     return UDF.from_torch_hub("pytorch/vision", "alexnet", pretrained=True)
 
 
-def test_all_zeros_true(all_zeros):
+def test_all_zeros_true(all_zeros_udf):
     sample_frame = Frame.from_numpy(np.zeros((3, 2, 3)))
-    assert next(iter(all_zeros(sample_frame).bboxes)).label
+    assert next(iter(all_zeros_udf(sample_frame).bboxes)).label
 
 
-def test_all_zeros_false(all_zeros):
+def test_all_zeros_false(all_zeros_udf):
     sample_frame = Frame.from_numpy(np.ones((3, 2, 3)))
-    assert not all_zeros(sample_frame) == "False"
+    assert not all_zeros_udf(sample_frame) == "False"
 
 
 @pytest.mark.skip
