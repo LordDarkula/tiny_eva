@@ -14,11 +14,12 @@ class VideoSource(Enum):
 
 
 class Video:
-    def __init__(self, mp4_file: Optional[PathLike] = None) -> None:
+    def __init__(self, video_source: VideoSource, mp4_file: Optional[PathLike] = None) -> None:
         """
         Represents a .mp4 video whose source is located at the path the user passed in.
         """
 
+        self._source = video_source
         self._mp4_file: Optional[PathLike] = (
             Path(mp4_file) if mp4_file is not None else None
         )
@@ -28,7 +29,7 @@ class Video:
 
     @classmethod
     def from_mp4_file(cls, source: PathLike):
-        return cls(mp4_file=source)
+        return cls(video_source=VideoSource.MP4_FILE, mp4_file=source)
 
     @classmethod
     def from_frames(cls, frames: List[Frame]):
