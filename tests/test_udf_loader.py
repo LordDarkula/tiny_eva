@@ -40,6 +40,7 @@ def test_all_zeros_false(all_zeros):
     assert not all_zeros(sample_frame) == "False"
 
 
+@pytest.mark.skip
 def test_yolo_result_len(yolo, traffic_frame_path):
     frame = Frame.from_source(traffic_frame_path)
     result = yolo(frame)
