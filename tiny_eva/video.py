@@ -38,10 +38,25 @@ class Video:
 
     @classmethod
     def from_mp4_file(cls, source: PathLike):
+        """
+        Creates Video from mp4 file stored on disk.
+        The user must run decode() before accessing individual frames.
+
+        Arguments:
+            source: path to mp4 file
+        """
         return cls(video_source=VideoSource.MP4_FILE, mp4_file=source)
 
     @classmethod
     def from_frames(cls, frames: List[Frame]):
+        """
+        Creates Video from in-memory collection of frames.
+        These frames can either be stored on disk as jpeg images or
+        stored in-memory as numpy arrays. See Frame for more information.
+
+        Arguments:
+            frames: list of Frame
+        """
         return cls(video_source=VideoSource.FRAME_LIST, frame_list=frames)
 
     def _frame_name(self, idx: int) -> str:
@@ -100,4 +115,6 @@ class Video:
                 f"Cannot get frame {idx}.\nThere are {self._num_frames} frames in the video."
             )
 
-        return Frame(source=(self.frames_path or Path.home()) / self._frame_name(idx))
+        return Frame.from_source(
+            (self.frames_path or Path.home()) / self._frame_name(idx)
+        )
