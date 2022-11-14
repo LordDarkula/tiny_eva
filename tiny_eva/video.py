@@ -26,6 +26,11 @@ class Video:
         self.is_decoded: bool = False
         self._num_frames = -1
 
+    @classmethod
+    def from_mp4_file(cls, source: PathLike):
+        return cls(mp4_file=source)
+
+    @classmethod
     def from_frames(cls, frames: List[Frame]):
         pass
 

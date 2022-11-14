@@ -13,7 +13,7 @@ def decoded_video(tmp_path_factory):
     sample_video_location = package_path.parent / "data" / "sample_640x360.mp4"
     decode_location = tmp_path_factory.mktemp("out")
 
-    video = Video(sample_video_location.resolve())
+    video = Video.from_mp4_file(sample_video_location.resolve())
     video.decode(decode_location)
     return video
 
