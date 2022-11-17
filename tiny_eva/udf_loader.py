@@ -1,5 +1,4 @@
 from typing import Any, Callable
-from enum import Enum, auto
 from abc import ABCMeta, abstractmethod
 
 import torch  # type: ignore
@@ -31,11 +30,13 @@ class TorchHubLoader(AbstractLoader):
 
 class UDF:
     @staticmethod
-    def from_callable(func: Callable):
+    def from_callable(func: Callable) -> CallableLoader:
         return CallableLoader(func)
 
     @staticmethod
-    def from_torch_hub(model_uri: str, name: str, pretrained: bool = True):
+    def from_torch_hub(
+        model_uri: str, name: str, pretrained: bool = True
+    ) -> TorchHubLoader:
         """
         Loads model from pytorch hub. Downloads model, so this will take time.
 
