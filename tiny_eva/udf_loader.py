@@ -1,6 +1,7 @@
 from typing import Any, Callable
 from os import PathLike
 from enum import Enum, auto
+from abc import ABCMeta, abstractmethod
 
 import torch  # type: ignore
 
@@ -12,14 +13,32 @@ class ModelSource(Enum):
     TORCH_HUB = auto()
 
 
+class AbstractLoader(metaclass=ABCMeta):
+    @abstractmethod
+    def __call__(self, frame: Frame, **kwds: Any) -> Any:
+        """Run model on frame and return result."""
+
+
+class CallableLoader(AbstractLoader):
+    def __init__(self, func: Callable) -> None:
+        self._func = func
+
+    def __call__(self, frame: Frame, **kwds: Any) -> Any:
+        return self._func(frame, *kwds)
+
+
+class TorchHubLoader(AbstractLoader):
+    pass
+
+
 class UDF:
     def __init__(self, func: Any, model_source: ModelSource) -> None:
         self.func: Any = func
         self.model_source: ModelSource = model_source
 
-    @classmethod
-    def from_callable(cls, func: Callable):
-        return cls(func, ModelSource.CALLABLE)
+    @staticmethod
+    def from_callable(func: Callable):
+        return CallableLoader(func)
 
     @classmethod
     def from_torch_hub(cls, path: PathLike, name: str, pretrained: bool = True):
