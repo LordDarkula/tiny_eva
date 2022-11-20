@@ -18,11 +18,21 @@ class FilterNode(AbstractNode):
 
 
 class Query:
-    def __init__(self) -> None:
+    """
+    Query is a functional-like API for applying UDFs to videos.
+
+    Queries can be constructed with method chaining.
+
+    >>> query = Query().map(lambda x: 2*x)
+    >>> len(query)
+    1
+    """
+
+    def __init__(self: QueryType) -> None:
 
         self._node_list: List[AbstractNode] = []
 
-    def __len__(self):
+    def __len__(self: QueryType):
         return len(self._node_list)
 
     def map(self: QueryType, udf: Any) -> QueryType:
