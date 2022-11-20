@@ -1,7 +1,6 @@
-from typing import Any, TypeVar, List
+from typing import Any, TypeVar, List, Callable
 
 QueryType = TypeVar("QueryType", bound="Query")
-FinalizedQueryType = TypeVar("FinalizedQueryType", bound="FinalizedQuery")
 
 
 class AbstractNode:
@@ -14,7 +13,8 @@ class MapNode(AbstractNode):
 
 
 class FilterNode(AbstractNode):
-    condition: Any
+    def __init__(self, condition: Callable) -> None:
+        self.condition = condition
 
 
 class Query:
@@ -32,7 +32,7 @@ class Query:
 
         self._node_list: List[AbstractNode] = []
 
-    def __len__(self: QueryType):
+    def __len__(self):
         return len(self._node_list)
 
     def map(self: QueryType, udf: Any) -> QueryType:
@@ -40,12 +40,5 @@ class Query:
         return self
 
     def filter(self: QueryType, condition: Any) -> QueryType:
+        self._node_list.append(FilterNode(condition))
         return self
-
-    def all(self: QueryType) -> FinalizedQueryType:
-        return FinalizedQuery(self, "all")
-
-
-class FinalizedQuery:
-    query: QueryType
-    finalizer: Any
