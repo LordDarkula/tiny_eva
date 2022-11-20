@@ -23,3 +23,7 @@ def test_square_greater_than_thirty_len(square_greater_than_thirty_query):
 
 def test_call_times_two_query(times_two_query):
     assert list(times_two_query([1, 2])) == [2, 4]
+
+
+def test_call_square_greater_than_thirty(square_greater_than_thirty_query):
+    assert list(square_greater_than_thirty_query([2, 4, 3, 6, 7, 5])) == [36, 49]

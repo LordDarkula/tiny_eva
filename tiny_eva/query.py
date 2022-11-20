@@ -7,7 +7,7 @@ QueryType = TypeVar("QueryType", bound="Query")
 
 class AbstractNode(metaclass=ABCMeta):
     @abstractmethod
-    def __call__(self, target: Any) -> Any:
+    def __call__(self, target: Iterable) -> Iterable:
         pass
 
 
@@ -15,16 +15,19 @@ class MapNode(AbstractNode):
     def __init__(self, udf: Any) -> None:
         self.udf = udf
 
-    def __call__(self, target: Any) -> Any:
-        return self.udf(target)
+    def __call__(self, target: Iterable) -> Iterable:
+        for item in target:
+            yield self.udf(item)
 
 
 class FilterNode(AbstractNode):
     def __init__(self, condition: Callable) -> None:
         self.condition = condition
 
-    def __call__(self, target: Any) -> bool:
-        return self.condition(target)
+    def __call__(self, target: Iterable) -> Iterable:
+        for item in target:
+            if self.condition(item):
+                yield item
 
 
 class Query:
@@ -46,12 +49,11 @@ class Query:
         return len(self._node_list)
 
     def __call__(self, target: Iterable) -> Iterable:
-        for item in target:
-            result = item
-            for node in self._node_list:
-                result = node(item)
+        current = target
+        for node in self._node_list:
+            current = list(node(current))
 
-            yield result
+        return current
 
     def map(self: QueryType, udf: Any) -> QueryType:
         self._node_list.append(MapNode(udf))
