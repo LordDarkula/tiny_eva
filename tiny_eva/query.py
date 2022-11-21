@@ -1,6 +1,6 @@
 from typing import Any, TypeVar, List, Callable, Iterable
-
 from abc import abstractmethod, ABCMeta
+from dataclasses import dataclass
 
 QueryType = TypeVar("QueryType", bound="Query")
 
@@ -30,6 +30,15 @@ class FilterNode(AbstractNode):
                 yield item
 
 
+@dataclass
+class Condition:
+    udf: Callable
+    result: Callable
+
+    def __call__(self, item: Any) -> bool:
+        return self.result(self.udf(item))
+
+
 class Query:
     """
     Query is a functional-like API for applying UDFs to videos.
@@ -42,7 +51,6 @@ class Query:
     """
 
     def __init__(self: QueryType) -> None:
-
         self._node_list: List[AbstractNode] = []
 
     def __len__(self) -> int:
