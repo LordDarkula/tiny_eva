@@ -1,5 +1,4 @@
 from os import PathLike
-from typing import TypeVar
 from abc import ABCMeta, abstractmethod
 
 import numpy as np  # type: ignore
@@ -36,7 +35,8 @@ class JPEGFrame(AbstractFrame):
         """
         image = Image.open(self._frame_path)
         frame = np.asarray(image)
-        return np.transpose(frame, (2, 0, 1))
+        channel_order = (2, 0, 1)
+        return np.transpose(frame, channel_order)
 
 
 class NumpyFrame(AbstractFrame):

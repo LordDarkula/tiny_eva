@@ -4,7 +4,7 @@ import pytest
 import numpy as np  # type: ignore
 
 import tiny_eva
-from tiny_eva.frame import Frame
+from tiny_eva.frame import Frame, AbstractFrame
 from tiny_eva.video import Video
 from tiny_eva.result import Result
 from tiny_eva.bbox import Bbox
@@ -33,7 +33,7 @@ def blank_frame_video():
 
 @pytest.fixture
 def all_zeros_udf():
-    def all_zeros(frame: Frame) -> Result:
+    def all_zeros(frame: AbstractFrame) -> Result:
         np_frame = frame.to_numpy()
         frame_shape = np_frame.shape  # type: ignore
         res = not np.any(np_frame)

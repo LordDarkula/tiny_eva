@@ -2,12 +2,12 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from tiny_eva.bbox import Bbox
-from tiny_eva.frame import Frame
+from tiny_eva.frame import AbstractFrame
 
 
 @dataclass(frozen=True)
 class Result:
-    frame: Frame
+    frame: AbstractFrame
     bboxes: Iterable[Bbox]
 
     def label_count(self, label: str):
