@@ -1,12 +1,55 @@
 from os import PathLike
 from pathlib import Path
 from typing import Any, Optional, Type, TypeVar
+from abc import ABCMeta, abstractmethod
 
 import numpy as np  # type: ignore
 from numpy.typing import ArrayLike  # type: ignore
 from PIL import Image  # type: ignore
 
 FrameType = TypeVar("FrameType", bound="Frame")
+
+
+class AbstractFrame(metaclass=ABCMeta):
+    @abstractmethod
+    def to_numpy(self) -> ArrayLike:
+        """Convert Frame into numpy array.
+
+        Returns:
+            np.array of shape (num_channels, height, width)
+        """
+
+
+class JPEGFrame(AbstractFrame):
+    def __init__(self, frame_path: PathLike) -> None:
+        self._frame_path = frame_path
+
+    def to_numpy(self) -> ArrayLike:
+        """Convert Frame into numpy array.
+
+         Opens JPEG in file with PIL and converts into numpy array.
+
+        Returns:
+            np.array of shape (num_channels, height, width)
+        """
+        image = Image.open(self._frame_path)
+        frame = np.asarray(image)
+        return np.transpose(frame, (2, 0, 1))
+
+
+class NumpyFrame(AbstractFrame):
+    def __init__(self, np_frame: ArrayLike) -> None:
+        self._np_frame = np_frame
+
+    def to_numpy(self) -> ArrayLike:
+        """Convert Frame into numpy array.
+
+         Returns in-memory numpy array.
+
+        Returns:
+            np.array of shape (num_channels, height, width)
+        """
+        return self._np_frame
 
 
 class Frame:
