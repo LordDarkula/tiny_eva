@@ -17,6 +17,12 @@ def traffic_frame_path():
     yield relative.resolve()
 
 
+@pytest.fixture
+def traffic2_frame_path():
+    relative = Path(tiny_eva.__file__).parent.parent / "data" / "traffic2.jpg"
+    yield relative.resolve()
+
+
 @pytest.fixture(scope="session")
 def blank_frame_video():
     frame_arr = np.zeros((3, 20, 20))

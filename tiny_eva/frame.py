@@ -11,6 +11,11 @@ FrameType = TypeVar("FrameType", bound="Frame")
 
 
 class AbstractFrame(metaclass=ABCMeta):
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, AbstractFrame):
+            return False
+        return np.array_equal(self.to_numpy(), __o.to_numpy())
+
     @abstractmethod
     def to_numpy(self) -> ArrayLike:
         """Convert Frame into numpy array.
@@ -75,12 +80,12 @@ class Frame:
         self._source = Path(source) if source is not None else None
         self._frame_array = frame_array
 
-    @classmethod
-    def from_source(cls: Type[FrameType], source: PathLike) -> FrameType:
+    @staticmethod
+    def from_source(source: PathLike) -> JPEGFrame:
         """
         Accepts path to a valid jpeg image
         """
-        return cls(source=source)
+        return JPEGFrame(source)
 
     @classmethod
     def from_numpy(cls: Type[FrameType], frame_array: ArrayLike) -> FrameType:
