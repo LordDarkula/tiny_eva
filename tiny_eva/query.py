@@ -45,13 +45,13 @@ class Query:
 
         self._node_list: List[AbstractNode] = []
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._node_list)
 
     def __call__(self, target: Iterable) -> Iterable:
         current = target
         for node in self._node_list:
-            current = list(node(current))
+            current = node(current)
 
         return current
 
