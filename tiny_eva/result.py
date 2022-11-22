@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterable, Any, Optional
+from typing import List, Any, Optional
 
 from tiny_eva.bbox import Bbox
 from tiny_eva.frame import AbstractFrame
@@ -8,7 +8,7 @@ from tiny_eva.frame import AbstractFrame
 @dataclass(frozen=True)
 class Result:
     frame: AbstractFrame
-    bboxes: Iterable[Bbox]
+    bboxes: List[Bbox]
     result: Optional[Any] = None
 
     def label_count(self, label: str):
@@ -19,3 +19,14 @@ class Result:
 
     def __len__(self) -> int:
         return len(self.bboxes)
+
+
+@dataclass(frozen=True)
+class SingularResult:
+    result: Any
+
+    def __bool__(self) -> bool:
+        return bool(self.result)
+
+    def __len__(self) -> int:
+        return 1
