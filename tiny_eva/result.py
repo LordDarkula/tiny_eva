@@ -1,28 +1,37 @@
 from dataclasses import dataclass
-from typing import List, Any, Optional
+from typing import List, Any
+from abc import ABCMeta, abstractmethod
 
 from tiny_eva.bbox import Bbox
-from tiny_eva.frame import AbstractFrame
 
 
 @dataclass(frozen=True)
-class Result:
-    frame: AbstractFrame
+class Result(metaclass=ABCMeta):
+    @abstractmethod
+    def __bool__(self) -> bool:
+        pass
+
+    @abstractmethod
+    def __len__(self) -> int:
+        pass
+
+
+@dataclass(frozen=True)
+class MultiResult(Result):
     bboxes: List[Bbox]
-    result: Optional[Any] = None
 
     def label_count(self, label: str):
         return len([None for box in self.bboxes if box.label == label])
 
     def __bool__(self) -> bool:
-        return bool(self.result)
+        return len(self.bboxes) != 0
 
     def __len__(self) -> int:
         return len(self.bboxes)
 
 
 @dataclass(frozen=True)
-class SingularResult:
+class SingularResult(Result):
     result: Any
 
     def __bool__(self) -> bool:
