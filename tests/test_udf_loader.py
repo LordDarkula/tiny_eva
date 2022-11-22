@@ -15,14 +15,14 @@ def alexnet():
     return UDF.from_torch_hub("pytorch/vision", "alexnet", pretrained=True)
 
 
-def test_all_zeros_true(all_zeros_udf):
+def test_all_zeros_true_on_zeros_frame(all_zeros_udf):
     sample_frame = Frame.from_numpy(np.zeros((3, 2, 3)))
-    assert next(iter(all_zeros_udf(sample_frame).bboxes)).label
+    assert all_zeros_udf(sample_frame)
 
 
-def test_all_zeros_false(all_zeros_udf):
+def test_all_zeros_false_in_on_ones_frame(all_zeros_udf):
     sample_frame = Frame.from_numpy(np.ones((3, 2, 3)))
-    assert not all_zeros_udf(sample_frame) == "False"
+    assert not all_zeros_udf(sample_frame)
 
 
 def test_yolo_result_len(yolo, traffic_frame_path):

@@ -38,6 +38,7 @@ def all_zeros_udf():
         frame_shape = np_frame.shape  # type: ignore
         res = not np.any(np_frame)
         return Result(
+            result=res,
             frame=Frame.from_numpy(np_frame),
             bboxes={Bbox(x1=0, y1=0, x2=frame_shape[2], y2=frame_shape[1], label=res)},
         )
