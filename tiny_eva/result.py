@@ -16,3 +16,6 @@ class Result:
 
     def __bool__(self) -> bool:
         return bool(self.result)
+
+    def __len__(self) -> int:
+        return len(self.bboxes)
