@@ -37,5 +37,9 @@ def test_sample_result_len_is_three(sample_result):
     assert len(sample_result) == 3
 
 
+def test_sample_result_truthiness(sample_result):
+    assert sample_result
+
+
 def test_two_cars_in_result(sample_result):
     assert sample_result.label_count("car") == 2
