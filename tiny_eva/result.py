@@ -20,9 +20,6 @@ class Result(metaclass=ABCMeta):
 class MultiResult(Result):
     bboxes: List[Bbox]
 
-    def label_count(self, label: str):
-        return len([None for box in self.bboxes if box.label == label])
-
     def __bool__(self) -> bool:
         return len(self.bboxes) != 0
 

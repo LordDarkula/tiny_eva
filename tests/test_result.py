@@ -8,7 +8,12 @@ from tiny_eva.bbox import Bbox
 
 
 @pytest.fixture
-def sample_result():
+def sample_single_result():
+    return SingularResult(True)
+
+
+@pytest.fixture
+def sample_multi_result():
     bboxes = {
         Bbox.from_coords(c1=(0, 0), c2=(20, 30), label="car"),
         Bbox.from_coords(c1=(32, 41), c2=(58, 55), label="tree"),
@@ -22,24 +27,23 @@ def test_intialize_abstract_result():
         Result()
 
 
-def test_singular_result_is_immutable():
-    res = SingularResult("hello")
+def test_singular_result_is_immutable(sample_single_result):
     with pytest.raises(FrozenInstanceError):
-        res.result = "goodbye"
+        sample_single_result.result = False
 
 
-def test_sample_result_is_immutable(sample_result):
+def test_sample_result_is_immutable(sample_multi_result):
     with pytest.raises(FrozenInstanceError):
-        sample_result.bboxes = []
+        sample_multi_result.bboxes = []
 
 
-def test_sample_result_len_is_three(sample_result):
-    assert len(sample_result) == 3
+def test_sample_result_len_is_three(sample_multi_result):
+    assert len(sample_multi_result) == 3
 
 
-def test_sample_result_truthiness(sample_result):
-    assert sample_result
+def test_sample_single_result_len_is_one(sample_single_result):
+    assert len(sample_single_result) == 1
 
 
-def test_two_cars_in_result(sample_result):
-    assert sample_result.label_count("car") == 2
+def test_sample_result_truthiness(sample_multi_result):
+    assert sample_multi_result
