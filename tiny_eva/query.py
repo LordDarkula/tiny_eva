@@ -32,6 +32,15 @@ class FilterNode(AbstractNode):
 
 @dataclass
 class Condition:
+    """
+    Condition allows the user to compare the Result of a UDF to
+    some expected bound.
+
+    Arguments:
+        udf: Callable that returns an instance of Result
+        result: Callable that takes Result and returns an instance of bool
+    """
+
     udf: Callable
     result: Callable
 
