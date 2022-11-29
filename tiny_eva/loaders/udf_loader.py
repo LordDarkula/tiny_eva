@@ -4,14 +4,7 @@ import torch  # type: ignore
 
 from tiny_eva.frame import AbstractFrame
 from tiny_eva.loaders.generic_loader import GenericLoader
-
-
-class CallableLoader(GenericLoader):
-    def __init__(self, func: Callable) -> None:
-        self._func = func
-
-    def __call__(self, frame: AbstractFrame, **kwds: Any) -> Any:
-        return self._func(frame, **kwds)
+from tiny_eva.loaders.callable_loader import CallableLoader
 
 
 class TorchHubLoader(GenericLoader):
@@ -25,6 +18,12 @@ class TorchHubLoader(GenericLoader):
 class UDF:
     @staticmethod
     def from_callable(func: Callable) -> CallableLoader:
+        """
+        Create UDF from Callable that returns subclass of Result.
+
+        Arguments:
+            func: callable that excepts Frame and returns Result
+        """
         return CallableLoader(func)
 
     @staticmethod
