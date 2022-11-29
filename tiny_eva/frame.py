@@ -1,5 +1,6 @@
 from os import PathLike
 from abc import ABCMeta, abstractmethod
+from typing import Optional
 
 import numpy as np  # type: ignore
 from numpy.typing import ArrayLike  # type: ignore
@@ -24,6 +25,7 @@ class AbstractFrame(metaclass=ABCMeta):
 class JPEGFrame(AbstractFrame):
     def __init__(self, frame_path: PathLike) -> None:
         self._frame_path = frame_path
+        self._np_frame: Optional[ArrayLike] = None
 
     def to_numpy(self) -> ArrayLike:
         """Convert Frame into numpy array.
@@ -33,10 +35,14 @@ class JPEGFrame(AbstractFrame):
         Returns:
             np.array of shape (num_channels, height, width)
         """
+        if self._np_frame is not None:
+            return self._np_frame
+
         image = Image.open(self._frame_path)
         frame = np.asarray(image)
         channel_order = (2, 0, 1)
-        return np.transpose(frame, channel_order)
+        self._np_frame = np.transpose(frame, channel_order)
+        return self._np_frame
 
 
 class NumpyFrame(AbstractFrame):

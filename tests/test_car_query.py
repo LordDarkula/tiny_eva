@@ -4,7 +4,6 @@ import pytest
 from tiny_eva.query import Query, Condition
 from tiny_eva.udf_loader import UDF
 from tiny_eva.frame import AbstractFrame
-from tiny_eva.video import Video
 from tiny_eva.frame import Frame
 from tiny_eva.result import SingularResult
 
