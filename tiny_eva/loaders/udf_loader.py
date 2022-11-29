@@ -1,18 +1,12 @@
 from typing import Any, Callable
-from abc import ABCMeta, abstractmethod
 
 import torch  # type: ignore
 
 from tiny_eva.frame import AbstractFrame
+from tiny_eva.loaders.generic_loader import GenericLoader
 
 
-class AbstractLoader(metaclass=ABCMeta):
-    @abstractmethod
-    def __call__(self, frame: AbstractFrame, **kwds: Any) -> Any:
-        """Run model on frame and return result."""
-
-
-class CallableLoader(AbstractLoader):
+class CallableLoader(GenericLoader):
     def __init__(self, func: Callable) -> None:
         self._func = func
 
@@ -20,7 +14,7 @@ class CallableLoader(AbstractLoader):
         return self._func(frame, **kwds)
 
 
-class TorchHubLoader(AbstractLoader):
+class TorchHubLoader(GenericLoader):
     def __init__(self, model_uri: str, name: str, **kwds: Any) -> None:
         self._torch_model = torch.hub.load(model_uri, name, **kwds)
 
