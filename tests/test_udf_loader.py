@@ -1,7 +1,7 @@
 import numpy as np  # type: ignore
 import pytest
 
-from tiny_eva.udf_loader import UDF
+from tiny_eva.loaders.udf_loader import UDF
 from tiny_eva.frame import Frame
 
 

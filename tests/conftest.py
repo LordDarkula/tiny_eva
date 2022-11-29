@@ -7,7 +7,7 @@ import tiny_eva
 from tiny_eva.frame import Frame, AbstractFrame
 from tiny_eva.video import Video
 from tiny_eva.result import SingularResult
-from tiny_eva.udf_loader import UDF
+from tiny_eva.loaders.udf_loader import UDF
 
 
 @pytest.fixture
