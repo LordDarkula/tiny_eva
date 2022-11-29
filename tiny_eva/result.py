@@ -34,5 +34,8 @@ class SingularResult(Result):
     def __bool__(self) -> bool:
         return bool(self.result)
 
+    def __int__(self) -> int:
+        return int(self.result)
+
     def __len__(self) -> int:
         return 1
