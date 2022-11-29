@@ -11,24 +11,34 @@ from tiny_eva.result import SingularResult
 
 @pytest.fixture
 def white_frame():
+    """
+    Frame consisting of zeros (white) values
+    """
     return Frame.from_numpy(np.zeros((1, 100, 300)))
 
 
 @pytest.fixture
 def black_frame():
+    """
+    Frame consisting of ones (black) values
+    """
     return Frame.from_numpy(np.ones((1, 100, 300)))
 
 
 @pytest.fixture
-def two_pixel_video(white_frame, black_frame):
-    frame1 = white_frame
-    frame2_np = np.zeros((1, 100, 300))
-    frame2_np[0, 0, 0] = 1
-    frame2_np[0, 2, 3] = 1
-    frame2 = Frame.from_numpy(frame2_np)
-    frame3 = black_frame
+def two_black_pixels_frame():
+    """
+    Frame with two one (black) pixels and the rest as zeros
+    """
+    np_frame = np.zeros((1, 100, 300))
+    np_frame[0, 0, 0] = 1
+    np_frame[0, 2, 3] = 1
+    return Frame.from_numpy(np_frame)
 
-    return Video.from_frames([frame1, frame2, frame3])
+
+@pytest.fixture
+def two_pixel_video(white_frame, black_frame, two_black_pixels_frame):
+    return Video.from_frames([white_frame, black_frame, two_black_pixels_frame])
 
 
 @pytest.fixture
@@ -62,7 +72,12 @@ def test_num_black_pixels_in_black_frame_is_every_pixel(black_frame, num_black_p
 
 
 def test_two_black_pixel_video_len(two_pixel_video, two_black_pixels):
-
     out_video = two_black_pixels(two_pixel_video)
-
     assert len(list(out_video)) == 1
+
+
+def test_two_black_pixel_video_frame(
+    two_pixel_video, two_black_pixels_frame, two_black_pixels
+):
+    out_video = two_black_pixels(two_pixel_video)
+    assert next(out_video) == two_black_pixels_frame
