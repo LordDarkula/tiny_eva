@@ -1,18 +1,8 @@
-from typing import Any, Callable
+from typing import Callable
 
-import torch  # type: ignore
 
-from tiny_eva.frame import AbstractFrame
-from tiny_eva.loaders.generic_loader import GenericLoader
+from tiny_eva.loaders.torch_hub_loader import TorchHubLoader
 from tiny_eva.loaders.callable_loader import CallableLoader
-
-
-class TorchHubLoader(GenericLoader):
-    def __init__(self, model_uri: str, name: str, **kwds: Any) -> None:
-        self._torch_model = torch.hub.load(model_uri, name, **kwds)
-
-    def __call__(self, frame: AbstractFrame, **kwds: Any) -> Any:
-        return self._torch_model(frame.to_numpy()).pandas().xyxy
 
 
 class UDF:
@@ -22,7 +12,7 @@ class UDF:
         Create UDF from Callable that returns subclass of Result.
 
         Arguments:
-            func: callable that excepts Frame and returns Result
+            func: callable that accepts Frame and returns Result
         """
         return CallableLoader(func)
 
