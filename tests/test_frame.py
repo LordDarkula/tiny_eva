@@ -1,7 +1,7 @@
 import numpy as np  # type: ignore
 import pytest
 
-from tiny_eva.frame import Frame, AbstractFrame, JPEGFrame, NumpyFrame
+from tiny_eva.frame import Frame, GenericFrame, JPEGFrame, NumpyFrame
 
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def traffic2_jpeg_frame(traffic2_frame_path):
 
 def test_initialize_abstract_frame():
     with pytest.raises(TypeError):
-        AbstractFrame()
+        GenericFrame()
 
 
 def test_initialize_jpeg_frame(traffic_jpeg_frame):

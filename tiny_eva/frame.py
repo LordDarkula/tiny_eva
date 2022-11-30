@@ -7,9 +7,9 @@ from numpy.typing import ArrayLike  # type: ignore
 from PIL import Image  # type: ignore
 
 
-class AbstractFrame(metaclass=ABCMeta):
+class GenericFrame(metaclass=ABCMeta):
     def __eq__(self, __o: object) -> bool:
-        if not isinstance(__o, AbstractFrame):
+        if not isinstance(__o, GenericFrame):
             return False
         return np.array_equal(self.to_numpy(), __o.to_numpy())
 
@@ -22,7 +22,7 @@ class AbstractFrame(metaclass=ABCMeta):
         """
 
 
-class JPEGFrame(AbstractFrame):
+class JPEGFrame(GenericFrame):
     def __init__(self, frame_path: PathLike) -> None:
         self._frame_path = frame_path
         self._np_frame: Optional[ArrayLike] = None
@@ -45,7 +45,7 @@ class JPEGFrame(AbstractFrame):
         return self._np_frame
 
 
-class NumpyFrame(AbstractFrame):
+class NumpyFrame(GenericFrame):
     def __init__(self, np_frame: ArrayLike) -> None:
         self._np_frame = np_frame
 

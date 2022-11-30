@@ -5,7 +5,7 @@ from enum import Enum, auto
 
 import cv2  # type: ignore
 
-from tiny_eva.frame import Frame, AbstractFrame
+from tiny_eva.frame import Frame, GenericFrame
 
 
 VideoType = TypeVar("VideoType", bound="Video")
@@ -21,7 +21,7 @@ class Video:
         self,
         video_source: VideoSource,
         mp4_file: Optional[PathLike] = None,
-        frame_list: Optional[List[AbstractFrame]] = None,
+        frame_list: Optional[List[GenericFrame]] = None,
     ) -> None:
         """
         Represents a .mp4 video whose source is located at the path the user passed in.
@@ -34,7 +34,7 @@ class Video:
         """
         self._source = video_source
         self._mp4_file: Optional[Path] = None
-        self._frame_list: Optional[List[AbstractFrame]] = None
+        self._frame_list: Optional[List[GenericFrame]] = None
         self.frames_path: Optional[Path] = None
         self.is_decoded: bool = False
         self._num_frames = -1
@@ -57,7 +57,7 @@ class Video:
         return cls(video_source=VideoSource.MP4_FILE, mp4_file=source)
 
     @classmethod
-    def from_frames(cls: Type[VideoType], frames: List[AbstractFrame]) -> VideoType:
+    def from_frames(cls: Type[VideoType], frames: List[GenericFrame]) -> VideoType:
         """
         Creates Video from in-memory collection of frames.
         These frames can either be stored on disk as jpeg images or
@@ -112,7 +112,7 @@ class Video:
 
         return self._num_frames
 
-    def __getitem__(self, idx: int) -> AbstractFrame:
+    def __getitem__(self, idx: int) -> GenericFrame:
         """
         After video is decoded, individual frames can be accessed with idx.
 

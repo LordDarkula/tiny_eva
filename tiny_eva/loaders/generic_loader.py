@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABCMeta
 from typing import Any
 
-from tiny_eva.frame import AbstractFrame
+from tiny_eva.frame import GenericFrame
 
 
 class GenericLoader(metaclass=ABCMeta):
@@ -10,5 +10,5 @@ class GenericLoader(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def __call__(self, frame: AbstractFrame, **kwds: Any) -> Any:
+    def __call__(self, frame: GenericFrame, **kwds: Any) -> Any:
         """Run model on frame and return result."""

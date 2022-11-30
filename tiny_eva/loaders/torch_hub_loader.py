@@ -3,7 +3,7 @@ from typing import Any
 import torch  # type: ignore
 
 from tiny_eva.loaders.generic_loader import GenericLoader
-from tiny_eva.frame import AbstractFrame
+from tiny_eva.frame import GenericFrame
 
 
 class TorchHubLoader(GenericLoader):
@@ -24,7 +24,7 @@ class TorchHubLoader(GenericLoader):
         """
         self._torch_model = torch.hub.load(model_uri, name, **kwds)
 
-    def __call__(self, frame: AbstractFrame, **kwds: Any) -> Any:
+    def __call__(self, frame: GenericFrame, **kwds: Any) -> Any:
         """
         TODO make function return Result instance
         """

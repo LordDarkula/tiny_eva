@@ -4,7 +4,7 @@ import pytest
 import numpy as np  # type: ignore
 
 import tiny_eva
-from tiny_eva.frame import Frame, AbstractFrame
+from tiny_eva.frame import Frame, GenericFrame
 from tiny_eva.video import Video
 from tiny_eva.result import SingularResult
 from tiny_eva.loaders.udf_loader import UDF
@@ -32,7 +32,7 @@ def blank_frame_video():
 
 @pytest.fixture
 def all_zeros_udf():
-    def all_zeros(frame: AbstractFrame) -> SingularResult:
+    def all_zeros(frame: GenericFrame) -> SingularResult:
         np_frame = frame.to_numpy()
         res = not np.any(np_frame)
         return SingularResult(res)

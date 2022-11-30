@@ -3,7 +3,7 @@ import pytest
 
 from tiny_eva.query import Query, Condition
 from tiny_eva.loaders.udf_loader import UDF
-from tiny_eva.frame import AbstractFrame
+from tiny_eva.frame import GenericFrame
 from tiny_eva.frame import Frame
 from tiny_eva.video import Video
 from tiny_eva.result import SingularResult
@@ -47,7 +47,7 @@ def num_black_pixels():
     UDF to calculate the number of pixels that are 1 in a frame.
     """
 
-    def num_black_pixels_callable(frame: AbstractFrame):
+    def num_black_pixels_callable(frame: GenericFrame):
         return SingularResult(np.count_nonzero(frame.to_numpy() == 1))
 
     return UDF.from_callable(num_black_pixels_callable)
