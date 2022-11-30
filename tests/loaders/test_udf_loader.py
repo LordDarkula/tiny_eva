@@ -14,6 +14,7 @@ def alexnet():
     return UDF.from_torch_hub("pytorch/vision", "alexnet", pretrained=True)
 
 
+@pytest.fixture
 def test_yolo_result_len(yolo, traffic_frame_path):
     frame = Frame.from_source(traffic_frame_path)
     result = yolo(frame)
