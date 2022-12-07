@@ -42,7 +42,7 @@ def two_pixel_video(white_frame, black_frame, two_black_pixels_frame):
 
 
 @pytest.fixture
-def num_black_pixels():
+def num_black_pixels_udf():
     """
     UDF to calculate the number of pixels that are 1 in a frame.
     """
@@ -54,21 +54,23 @@ def num_black_pixels():
 
 
 @pytest.fixture
-def two_black_pixels(num_black_pixels):
+def two_black_pixels(num_black_pixels_udf):
     def two_occurrences_of_one_pixel(result):
         return int(result) == 2
 
     return Query().filter(
-        Condition(udf=num_black_pixels, result=two_occurrences_of_one_pixel)
+        Condition(udf=num_black_pixels_udf, result=two_occurrences_of_one_pixel)
     )
 
 
-def test_num_black_pixels_in_white_frame_is_zero(white_frame, num_black_pixels):
-    assert int(num_black_pixels(white_frame)) == 0
+def test_num_black_pixels_in_white_frame_is_zero(white_frame, num_black_pixels_udf):
+    assert int(num_black_pixels_udf(white_frame)) == 0
 
 
-def test_num_black_pixels_in_black_frame_is_every_pixel(black_frame, num_black_pixels):
-    assert int(num_black_pixels(black_frame)) == 30_000
+def test_num_black_pixels_in_black_frame_is_every_pixel(
+    black_frame, num_black_pixels_udf
+):
+    assert int(num_black_pixels_udf(black_frame)) == 30_000
 
 
 def test_two_black_pixel_video_len(two_pixel_video, two_black_pixels):
