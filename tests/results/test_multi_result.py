@@ -4,7 +4,7 @@ import pytest
 import pandas as pd  # type: ignore
 
 
-from tiny_eva.result import MultiResult, Result
+from tiny_eva.result import MultiResult, Result, PandasResult
 from tiny_eva.bbox import Bbox
 
 
@@ -16,6 +16,26 @@ def sample_multi_result():
         Bbox.from_coords(c1=(3, 41), c2=(44, 45), label="car"),
     }
     return MultiResult(bboxes)
+
+
+@pytest.fixture
+def sample_result_df():
+    return pd.DataFrame.from_dict(
+        {
+            "xmin": [0, 30, 20],
+            "ymin": [0, 0, 20],
+            "xmax": [50, 40, 30],
+            "ymax": [10, 40, 30],
+            "confidence": [0.9, 0.5, 0.7],
+            "class": [0, 1, 2],
+            "name": ["car", "bus", "person"],
+        }
+    )
+
+
+@pytest.fixture
+def sample_pandas_result(sample_result_df):
+    return PandasResult(sample_result_df)
 
 
 def test_intialize_abstract_result():
@@ -36,15 +56,9 @@ def test_sample_result_truthiness(sample_multi_result):
     assert sample_multi_result
 
 
-def test_create_result_from_pandas():
-    df = pd.DataFrame.from_dict(
-        {
-            "xmin": [0, 30, 20],
-            "ymin": [0, 0, 20],
-            "xmax": [50, 40, 30],
-            "ymax": [10, 40, 30],
-            "confidence": [0.9, 0.5, 0.7],
-            "class": [0, 1, 2],
-            "name": ["car", "bus", "person"],
-        }
-    )
+def test_bool_result_from_pandas(sample_pandas_result):
+    assert not bool(sample_pandas_result)
+
+
+def test_pandas_result_len(sample_pandas_result):
+    assert len(sample_pandas_result) == 3

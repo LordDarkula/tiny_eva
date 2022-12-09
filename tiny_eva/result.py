@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import List, Any
 from abc import ABCMeta, abstractmethod
 
+import pandas as pd  # type: ignore
+
 from tiny_eva.bbox import Bbox
 
 
@@ -25,6 +27,17 @@ class MultiResult(Result):
 
     def __len__(self) -> int:
         return len(self.bboxes)
+
+
+@dataclass(frozen=True)
+class PandasResult(Result):
+    df: pd.DataFrame
+
+    def __bool__(self) -> bool:
+        return self.df.empty
+
+    def __len__(self) -> int:
+        return len(self.df)
 
 
 @dataclass(frozen=True)
