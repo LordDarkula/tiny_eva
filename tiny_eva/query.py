@@ -5,24 +5,31 @@ from dataclasses import dataclass
 QueryType = TypeVar("QueryType", bound="Query")
 
 
-class AbstractNode(metaclass=ABCMeta):
+class Node(metaclass=ABCMeta):
+    """
+    Nodes are the base of the Query API.
+
+    They accept an iterable of frames and output another iterable
+    after the operation has been performed.
+    """
+
     @abstractmethod
     def __call__(self, target: Iterable) -> Iterable:
         pass
 
 
-class MapNode(AbstractNode):
-    def __init__(self, udf: Any) -> None:
-        self.udf = udf
+@dataclass(frozen=True)
+class MapNode(Node):
+    udf: Callable
 
     def __call__(self, target: Iterable) -> Iterable:
         for item in target:
             yield self.udf(item)
 
 
-class FilterNode(AbstractNode):
-    def __init__(self, condition: Callable) -> None:
-        self.condition = condition
+@dataclass(frozen=True)
+class FilterNode(Node):
+    condition: Callable
 
     def __call__(self, target: Iterable) -> Iterable:
         for item in target:
@@ -30,7 +37,7 @@ class FilterNode(AbstractNode):
                 yield item
 
 
-@dataclass
+@dataclass(frozen=True)
 class Condition:
     """
     Condition allows the user to compare the Result of a UDF to
@@ -60,7 +67,7 @@ class Query:
     """
 
     def __init__(self: QueryType) -> None:
-        self._node_list: List[AbstractNode] = []
+        self._node_list: List[Node] = []
 
     def __len__(self) -> int:
         return len(self._node_list)
