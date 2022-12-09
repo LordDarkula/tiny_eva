@@ -3,13 +3,8 @@ from dataclasses import FrozenInstanceError
 import pytest
 
 
-from tiny_eva.result import MultiResult, Result, SingularResult
+from tiny_eva.result import MultiResult, Result
 from tiny_eva.bbox import Bbox
-
-
-@pytest.fixture
-def sample_single_result():
-    return SingularResult(True)
 
 
 @pytest.fixture
@@ -25,11 +20,6 @@ def sample_multi_result():
 def test_intialize_abstract_result():
     with pytest.raises(TypeError):
         Result()
-
-
-def test_singular_result_is_immutable(sample_single_result):
-    with pytest.raises(FrozenInstanceError):
-        sample_single_result.result = False
 
 
 def test_sample_result_is_immutable(sample_multi_result):
