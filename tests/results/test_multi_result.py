@@ -38,6 +38,11 @@ def sample_pandas_result(sample_result_df):
     return PandasResult(sample_result_df)
 
 
+@pytest.fixture
+def sample_pandas_result_first_bbox():
+    return Bbox.from_coords(c1=(0, 0), c2=(50, 10))
+
+
 def test_intialize_abstract_result():
     with pytest.raises(TypeError):
         Result()
@@ -56,9 +61,13 @@ def test_sample_result_truthiness(sample_multi_result):
     assert sample_multi_result
 
 
-def test_bool_result_from_pandas(sample_pandas_result):
+def test_pandas_result_bool(sample_pandas_result):
     assert not bool(sample_pandas_result)
 
 
 def test_pandas_result_len(sample_pandas_result):
     assert len(sample_pandas_result) == 3
+
+
+def test_pandas_result_index(sample_pandas_result, sample_pandas_result_first_bbox):
+    assert sample_pandas_result[0] == sample_pandas_result_first_bbox

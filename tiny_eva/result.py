@@ -39,6 +39,24 @@ class PandasResult(Result):
     def __len__(self) -> int:
         return len(self.df)
 
+    def __getitem__(self, idx: int) -> Bbox:
+        """
+        Get the BBox associated with a specific result.
+
+        Models can return multiple results each with it's own Bbox and class.
+
+        Arguments:
+            idx: index of result
+
+        Returns:
+            Bbox containing result
+        """
+        coord1x = int(self.df.loc[idx, "xmin"])
+        coord1y = int(self.df.loc[idx, "ymin"])
+        coord2x = int(self.df.loc[idx, "xmax"])
+        coord2y = int(self.df.loc[idx, "ymax"])
+        return Bbox.from_coords(c1=(coord1x, coord1y), c2=(coord2x, coord2y))
+
 
 @dataclass(frozen=True)
 class SingularResult(Result):

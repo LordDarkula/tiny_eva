@@ -30,7 +30,7 @@ class Bbox:
 
         Arguments:
             c1: bottom-left corner
-            c2: bottom-right corner
+            c2: top-right corner
         """
         return cls(x1=c1[0], y1=c1[1], x2=c2[0], y2=c2[1], label=label)
 
