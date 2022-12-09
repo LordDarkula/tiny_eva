@@ -1,6 +1,7 @@
 from dataclasses import FrozenInstanceError
 
 import pytest
+import pandas as pd  # type: ignore
 
 
 from tiny_eva.result import MultiResult, Result
@@ -31,9 +32,19 @@ def test_sample_result_len_is_three(sample_multi_result):
     assert len(sample_multi_result) == 3
 
 
-def test_sample_single_result_len_is_one(sample_single_result):
-    assert len(sample_single_result) == 1
-
-
 def test_sample_result_truthiness(sample_multi_result):
     assert sample_multi_result
+
+
+def test_create_result_from_pandas():
+    df = pd.DataFrame.from_dict(
+        {
+            "xmin": [0, 30, 20],
+            "ymin": [0, 0, 20],
+            "xmax": [50, 40, 30],
+            "ymax": [10, 40, 30],
+            "confidence": [0.9, 0.5, 0.7],
+            "class": [0, 1, 2],
+            "name": ["car", "bus", "person"],
+        }
+    )

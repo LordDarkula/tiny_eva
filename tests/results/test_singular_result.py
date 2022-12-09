@@ -13,3 +13,7 @@ def sample_single_result():
 def test_singular_result_is_immutable(sample_single_result):
     with pytest.raises(FrozenInstanceError):
         sample_single_result.result = False
+
+
+def test_sample_single_result_len_is_one(sample_single_result):
+    assert len(sample_single_result) == 1
