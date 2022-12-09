@@ -55,7 +55,10 @@ class PandasResult(Result):
         coord1y = int(self.df.loc[idx, "ymin"])
         coord2x = int(self.df.loc[idx, "xmax"])
         coord2y = int(self.df.loc[idx, "ymax"])
-        return Bbox.from_coords(c1=(coord1x, coord1y), c2=(coord2x, coord2y))
+        label = str(self.df.loc[idx, "name"])
+        return Bbox.from_coords(
+            c1=(coord1x, coord1y), c2=(coord2x, coord2y), label=label
+        )
 
 
 @dataclass(frozen=True)

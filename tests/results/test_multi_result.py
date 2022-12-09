@@ -40,7 +40,7 @@ def sample_pandas_result(sample_result_df):
 
 @pytest.fixture
 def sample_pandas_result_first_bbox():
-    return Bbox.from_coords(c1=(0, 0), c2=(50, 10))
+    return Bbox.from_coords(c1=(0, 0), c2=(50, 10), label="car")
 
 
 def test_intialize_abstract_result():

@@ -4,6 +4,7 @@ import torch  # type: ignore
 
 from tiny_eva.loaders.generic_loader import GenericLoader
 from tiny_eva.frame import GenericFrame
+from tiny_eva.result import PandasResult
 
 
 class TorchHubLoader(GenericLoader):
@@ -28,4 +29,5 @@ class TorchHubLoader(GenericLoader):
         """
         TODO make function return Result instance
         """
-        return self._torch_model(frame.to_numpy()).pandas().xyxy
+        bboxes = self._torch_model(frame.to_numpy()).pandas().xyxy[0]
+        return PandasResult(bboxes)
