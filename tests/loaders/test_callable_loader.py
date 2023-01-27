@@ -1,5 +1,5 @@
-import pytest
 import numpy as np  # type: ignore
+import pytest
 
 from tiny_eva.frame import Frame
 

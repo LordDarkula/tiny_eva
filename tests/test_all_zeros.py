@@ -1,7 +1,7 @@
 import pytest
 
-from tiny_eva.query import Query
 from tiny_eva.executor import NaiveExecutor
+from tiny_eva.query import Query
 
 
 @pytest.mark.skip

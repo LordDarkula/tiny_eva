@@ -1,6 +1,6 @@
-from typing import Any, TypeVar, List, Callable, Iterable
-from abc import abstractmethod, ABCMeta
+from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
+from typing import Any, Callable, Iterable, List, TypeVar
 
 QueryType = TypeVar("QueryType", bound="Query")
 

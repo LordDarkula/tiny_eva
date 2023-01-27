@@ -1,6 +1,6 @@
 import pytest
 
-from tiny_eva.query import Query, Condition
+from tiny_eva.query import Condition, Query
 
 
 @pytest.fixture

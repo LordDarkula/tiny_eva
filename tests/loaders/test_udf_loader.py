@@ -1,7 +1,7 @@
 import pytest
 
-from tiny_eva.loaders.udf_loader import UDF
 from tiny_eva.frame import Frame
+from tiny_eva.loaders.udf_loader import UDF
 
 
 @pytest.fixture(scope="session")

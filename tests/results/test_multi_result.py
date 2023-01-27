@@ -1,11 +1,10 @@
 from dataclasses import FrozenInstanceError
 
-import pytest
 import pandas as pd  # type: ignore
+import pytest
 
-
-from tiny_eva.result import MultiResult, Result, PandasResult
 from tiny_eva.bbox import Bbox
+from tiny_eva.result import MultiResult, PandasResult, Result
 
 
 @pytest.fixture

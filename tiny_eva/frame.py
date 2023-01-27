@@ -1,5 +1,5 @@
-from os import PathLike
 from abc import ABCMeta, abstractmethod
+from os import PathLike
 from typing import Optional
 
 import numpy as np  # type: ignore

@@ -1,13 +1,13 @@
 from pathlib import Path
 
-import pytest
 import numpy as np  # type: ignore
+import pytest
 
 import tiny_eva
 from tiny_eva.frame import Frame, GenericFrame
-from tiny_eva.video import Video
-from tiny_eva.result import SingularResult
 from tiny_eva.loaders.udf_loader import UDF
+from tiny_eva.result import SingularResult
+from tiny_eva.video import Video
 
 
 @pytest.fixture
