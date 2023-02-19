@@ -1,7 +1,7 @@
-from typing import Callable, Any
+from typing import Any, Callable
 
-from tiny_eva.loaders.generic_loader import GenericLoader
 from tiny_eva.frame import GenericFrame
+from tiny_eva.loaders.generic_loader import GenericLoader
 
 
 class CallableLoader(GenericLoader):

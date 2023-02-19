@@ -1,12 +1,11 @@
+from enum import Enum, auto
 from os import PathLike
 from pathlib import Path
 from typing import List, Optional, Type, TypeVar
-from enum import Enum, auto
 
 import cv2  # type: ignore
 
 from tiny_eva.frame import Frame, GenericFrame
-
 
 VideoType = TypeVar("VideoType", bound="Video")
 

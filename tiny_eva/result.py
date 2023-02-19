@@ -1,6 +1,6 @@
-from dataclasses import dataclass
-from typing import List, Any
 from abc import ABCMeta, abstractmethod
+from dataclasses import dataclass
+from typing import Any, List
 
 import pandas as pd  # type: ignore
 

@@ -1,6 +1,6 @@
 import pytest
 
-from tiny_eva.query import Query, Condition
+from tiny_eva.query import Condition, Query
 
 
 @pytest.fixture
@@ -16,6 +16,11 @@ def square_greater_than_thirty_query():
 @pytest.fixture
 def filter_values_if_square_greater_than_thirty_query():
     return Query().filter(Condition(udf=lambda x: x**2, result=lambda x: x > 30))
+
+
+@pytest.fixture
+def greatest_number_query():
+    return Query().reduce(lambda x, y: max(x, y))
 
 
 def test_times_two_query_len(times_two_query):
@@ -40,3 +45,19 @@ def test_call_filter_values_if_square_greater_than_thirty_query(
     assert list(
         filter_values_if_square_greater_than_thirty_query([2, 4, 3, 6, 7, 5])
     ) == [6, 7]
+
+
+def test_greatest_number_query_len(greatest_number_query):
+    assert len(greatest_number_query) == 1
+
+
+def test_greatest_number_in_single_item_list(greatest_number_query):
+    assert list(greatest_number_query([1])) == [1]
+
+
+def test_greatest_number_in_two_item_list(greatest_number_query):
+    assert list(greatest_number_query([2, 1])) == [2]
+
+
+def test_greatest_number_in_multi_item_list(greatest_number_query):
+    assert list(greatest_number_query([3, 4, 1])) == [4]

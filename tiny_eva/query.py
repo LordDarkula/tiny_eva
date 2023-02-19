@@ -1,6 +1,6 @@
-from typing import Any, TypeVar, List, Callable, Iterable
-from abc import abstractmethod, ABCMeta
+from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
+from typing import Any, Callable, Iterable, List, TypeVar
 
 QueryType = TypeVar("QueryType", bound="Query")
 
@@ -35,6 +35,23 @@ class FilterNode(Node):
         for item in target:
             if self.condition(item):
                 yield item
+
+
+@dataclass(frozen=True)
+class ReduceNode(Node):
+    condition: Callable
+
+    def _recursive_call(self, target: List) -> Iterable:
+        if len(target) == 1:
+            return target[0]
+
+        return self.condition(target[0], self._recursive_call(target[1:]))
+
+    def __call__(self, target: Iterable) -> Iterable:
+        if len(list(target)) == 1:
+            return target
+
+        return [self._recursive_call(list(target))]
 
 
 @dataclass(frozen=True)
@@ -85,4 +102,8 @@ class Query:
 
     def filter(self: QueryType, condition: Any) -> QueryType:
         self._node_list.append(FilterNode(condition))
+        return self
+
+    def reduce(self: QueryType, condition: Any) -> QueryType:
+        self._node_list.append(ReduceNode(condition))
         return self

@@ -2,8 +2,8 @@ from typing import Any
 
 import torch  # type: ignore
 
-from tiny_eva.loaders.generic_loader import GenericLoader
 from tiny_eva.frame import GenericFrame
+from tiny_eva.loaders.generic_loader import GenericLoader
 from tiny_eva.result import PandasResult
 
 

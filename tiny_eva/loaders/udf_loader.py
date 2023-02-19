@@ -1,8 +1,7 @@
 from typing import Callable
 
-
-from tiny_eva.loaders.torch_hub_loader import TorchHubLoader
 from tiny_eva.loaders.callable_loader import CallableLoader
+from tiny_eva.loaders.torch_hub_loader import TorchHubLoader
 
 
 class UDF:
