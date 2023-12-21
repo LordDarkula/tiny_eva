@@ -35,6 +35,6 @@ def all_zeros_udf() -> UDF:
     def all_zeros(frame: GenericFrame) -> SingularResult:
         np_frame = frame.to_numpy()
         res = not np.any(np_frame)
-        return SingularResult(res)
+        return SingularResult(result=res, frame=frame)
 
     return UDF.from_callable(all_zeros)

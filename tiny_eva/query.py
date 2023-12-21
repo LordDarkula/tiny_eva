@@ -1,6 +1,9 @@
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Callable, Iterable, List, TypeVar
+from typing import Any, Callable, Iterable, List, TypeVar, Union
+
+from tiny_eva.result import Result
+from tiny_eva.video import Video
 
 QueryType = TypeVar("QueryType", bound="Query")
 
@@ -14,7 +17,9 @@ class Node(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def __call__(self, target: Iterable) -> Iterable:
+    def __call__(
+        self, target: Union[Video, List[Result]]
+    ) -> Union[Video, List[Result]]:
         pass
 
 
@@ -22,19 +27,26 @@ class Node(metaclass=ABCMeta):
 class MapNode(Node):
     udf: Callable
 
-    def __call__(self, target: Iterable) -> Iterable:
-        for item in target:
-            yield self.udf(item)
+    def __call__(self, target: Union[Video, List[Result]]) -> List[Result]:
+        if isinstance(target, Video):
+            results = [self.udf(frame) for frame in target]
+        else:
+            results = [self.udf(result.frame) for result in target]
+
+        return results
 
 
 @dataclass(frozen=True)
 class FilterNode(Node):
     condition: Callable
 
-    def __call__(self, target: Iterable) -> Iterable:
-        for item in target:
-            if self.condition(item):
-                yield item
+    def __call__(self, target: Union[Video, List[Result]]) -> Video:
+        if isinstance(target, Video):
+            frames = [frame for frame in target if self.condition(frame)]
+        else:
+            frames = [result.frame for result in target if self.condition(result.frame)]
+
+        return Video.from_frames(frames)
 
 
 @dataclass(frozen=True)
@@ -89,7 +101,7 @@ class Query:
     def __len__(self) -> int:
         return len(self._node_list)
 
-    def __call__(self, target: Iterable) -> Iterable:
+    def __call__(self, target: Video) -> Result:
         current = target
         for node in self._node_list:
             current = node(current)

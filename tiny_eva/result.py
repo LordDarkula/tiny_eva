@@ -5,6 +5,7 @@ from typing import Any, List
 import pandas as pd  # type: ignore
 
 from tiny_eva.bbox import Bbox
+from tiny_eva.frame import Frame
 
 
 @dataclass(frozen=True)
@@ -21,6 +22,7 @@ class Result(metaclass=ABCMeta):
 @dataclass(frozen=True)
 class MultiResult(Result):
     bboxes: List[Bbox]
+    frame: Frame
 
     def __bool__(self) -> bool:
         return len(self.bboxes) != 0
@@ -32,6 +34,7 @@ class MultiResult(Result):
 @dataclass(frozen=True)
 class PandasResult(Result):
     df: pd.DataFrame
+    frame: Frame
 
     def __bool__(self) -> bool:
         return self.df.empty
@@ -64,6 +67,7 @@ class PandasResult(Result):
 @dataclass(frozen=True)
 class SingularResult(Result):
     result: Any
+    frame: Frame
 
     def __bool__(self) -> bool:
         return bool(self.result)
