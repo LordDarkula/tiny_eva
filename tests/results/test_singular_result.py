@@ -1,5 +1,6 @@
 from dataclasses import FrozenInstanceError
 
+import numpy as np
 import pytest
 
 from tiny_eva.result import SingularResult
@@ -7,7 +8,7 @@ from tiny_eva.result import SingularResult
 
 @pytest.fixture
 def sample_single_result():
-    return SingularResult(True)
+    return SingularResult(frame=np.zeros([3, 3, 3]), result=True)
 
 
 def test_singular_result_is_immutable(sample_single_result):

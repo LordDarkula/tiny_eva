@@ -1,5 +1,6 @@
 from dataclasses import FrozenInstanceError
 
+import numpy as np
 import pandas as pd  # type: ignore
 import pytest
 
@@ -14,7 +15,7 @@ def sample_multi_result():
         Bbox.from_coords(c1=(32, 41), c2=(58, 55), label="tree"),
         Bbox.from_coords(c1=(3, 41), c2=(44, 45), label="car"),
     }
-    return MultiResult(bboxes)
+    return MultiResult(frame=np.zeros([3, 3, 3]), bboxes=bboxes)
 
 
 @pytest.fixture
@@ -34,7 +35,7 @@ def sample_result_df():
 
 @pytest.fixture
 def sample_pandas_result(sample_result_df):
-    return PandasResult(sample_result_df)
+    return PandasResult(frame=np.zeros([3, 3, 3]), df=sample_result_df)
 
 
 @pytest.fixture
