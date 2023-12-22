@@ -11,7 +11,7 @@ class TorchHubLoader(GenericLoader):
     """
     Create UDF from model loaded from pytorch hub.
 
-    Downloads model from torch hub at object initialization time.
+    Model must be downloaded with download() method.
     """
 
     def __init__(self, model_uri: str, name: str, **kwds: Any) -> None:
@@ -23,11 +23,25 @@ class TorchHubLoader(GenericLoader):
             name: name of hub model
             pretrained: should fetched model be pretrained
         """
-        self._torch_model = torch.hub.load(model_uri, name, **kwds)
+        self._model_uri = model_uri
+        self._model_name = name
+        self._model_keyword_arguments = kwds
+        self._torch_model = None
+
+    def download(self) -> None:
+        """
+        Download model from torch hub
+        """
+        self._torch_model = torch.hub.load(
+            self._model_uri, self._model_name, **self._model_keyword_arguments
+        )
 
     def __call__(self, frame: GenericFrame, **kwds: Any) -> Any:
         """
-        TODO make function return Result instance
+        Evaluate downloaded model on a single frame.
         """
+        if self._torch_model is None:
+            raise ValueError("Must download model from Torch Hub before calling")
+
         bboxes = self._torch_model(frame.to_numpy()).pandas().xyxy[0]
         return PandasResult(bboxes)
