@@ -9,7 +9,7 @@ from tiny_eva.video import Video
 
 
 @pytest.fixture
-def white_frame():
+def white_frame() -> GenericFrame:
     """
     Frame consisting of zeros (white) values
     """
@@ -17,7 +17,7 @@ def white_frame():
 
 
 @pytest.fixture
-def black_frame():
+def black_frame() -> GenericFrame:
     """
     Frame consisting of ones (black) values
     """
@@ -25,7 +25,7 @@ def black_frame():
 
 
 @pytest.fixture
-def two_black_pixels_frame():
+def two_black_pixels_frame() -> GenericFrame:
     """
     Frame with two one (black) pixels and the rest as zeros
     """
@@ -36,7 +36,7 @@ def two_black_pixels_frame():
 
 
 @pytest.fixture
-def two_pixel_video(white_frame, black_frame, two_black_pixels_frame):
+def two_pixel_video(white_frame, black_frame, two_black_pixels_frame) -> Video:
     return Video.from_frames([white_frame, black_frame, two_black_pixels_frame])
 
 
@@ -47,7 +47,9 @@ def num_black_pixels_udf():
     """
 
     def num_black_pixels_callable(frame: GenericFrame):
-        return SingularResult(np.count_nonzero(frame.to_numpy() == 1))
+        return SingularResult(
+            frame=frame, result=np.count_nonzero(frame.to_numpy() == 1)
+        )
 
     return UDF.from_callable(num_black_pixels_callable)
 
@@ -81,4 +83,4 @@ def test_two_black_pixel_video_frame(
     two_pixel_video, two_black_pixels_frame, two_black_pixels
 ):
     out_video = two_black_pixels(two_pixel_video)
-    assert next(out_video) == two_black_pixels_frame
+    assert out_video[0] == two_black_pixels_frame
